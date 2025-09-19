@@ -9,18 +9,14 @@ import { GoogleGenAI } from '@google/genai';
 
 const App = () => {
   // State for each input field
-  const [plot, setPlot] = useState('A brother and sister traveling to foreign countries.');
-  const [theme, setTheme] = useState('Cultural experiences, small mistakes, and meaningful lessons.');
-  const [tone, setTone] = useState('Simple, warm, and encouraging.');
+  const [plot, setPlot] = useState('');
+  const [theme, setTheme] = useState('');
+  const [tone, setTone] = useState('');
   const [writingType, setWritingType] = useState('storybook');
   const [ageGroup, setAgeGroup] = useState('middle school');
   const [proficiency, setProficiency] = useState('lower-intermediate');
-  const [includeGrammar, setIncludeGrammar] = useState(
-    `- gerunds\n- sense verbs + adjective (e.g., 'look happy')\n- subjective relative pronouns (who, which, that as subjects)\n- adverbs of frequency\n- present perfect (but not present perfect progressive)\n- so…that clauses\n- passive voice\n- comparative degree (but not double comparative structures like 'the more…the more')\n- objective relative pronouns (whom, which, that as objects)\n- participles expressing emotion (e.g., 'surprising', 'excited')\n- 'It' as a dummy subject (e.g., 'It is important to…')\n- indirect questions\n- object complements (e.g., 'make me happy')\n- if clauses`
-  );
-  const [excludeGrammar, setExcludeGrammar] = useState(
-    `- present perfect progressive\n- the relative pronoun 'what'\n- non-restrictive relative clauses\n- participles modifying nouns from behind (e.g., 'the man standing there')\n- past perfect\n- conjunctions like 'although, unless, whereas'\n- if/whether used for indirect yes/no questions\n- passive voice of modal verbs (e.g., 'must be done')\n- idiomatic 'It is/was ~ for ~ to ~' expressions\n- relative adverbs (when, where, why as relative pronouns)\n- the comparative (… the comparative) structure (e.g., 'the more, the better')\n- participle clauses (e.g., 'Walking down the street, he…')\n- past subjunctive (e.g., 'If I were you…')\n- 'so that' purpose clauses`
-  );
+  const [includeGrammar, setIncludeGrammar] = useState('');
+  const [excludeGrammar, setExcludeGrammar] = useState('');
 
   // State for API interaction
   const [story, setStory] = useState('');
@@ -38,16 +34,42 @@ You are a story generator. The user will provide conditions in separate fields o
 
 Here are the conditions the user has provided:
 
-General Plot: ${plot}
-Theme to Emphasize: ${theme}
-Tone/Style: ${tone}
+General Plot: ${plot || 'A brother and sister traveling to foreign countries.'}
+Theme to Emphasize: ${theme || 'Cultural experiences, small mistakes, and meaningful lessons.'}
+Tone/Style: ${tone || 'Simple, warm, and encouraging.'}
 Type of Writing: ${writingType}
 Target Reader Age Group: ${ageGroup}
 Reader Proficiency Level: ${proficiency}
 Grammar Features to Include:
-${includeGrammar}
+${includeGrammar || `- gerunds
+- sense verbs + adjective (e.g., 'look happy')
+- subjective relative pronouns (who, which, that as subjects)
+- adverbs of frequency
+- present perfect (but not present perfect progressive)
+- so…that clauses
+- passive voice
+- comparative degree (but not double comparative structures like 'the more…the more')
+- objective relative pronouns (whom, which, that as objects)
+- participles expressing emotion (e.g., 'surprising', 'excited')
+- 'It' as a dummy subject (e.g., 'It is important to…')
+- indirect questions
+- object complements (e.g., 'make me happy')
+- if clauses`}
 Grammar Features to Exclude:
-${excludeGrammar}
+${excludeGrammar || `- present perfect progressive
+- the relative pronoun 'what'
+- non-restrictive relative clauses
+- participles modifying nouns from behind (e.g., 'the man standing there')
+- past perfect
+- conjunctions like 'although, unless, whereas'
+- if/whether used for indirect yes/no questions
+- passive voice of modal verbs (e.g., 'must be done')
+- idiomatic 'It is/was ~ for ~ to ~' expressions
+- relative adverbs (when, where, why as relative pronouns)
+- the comparative (… the comparative) structure (e.g., 'the more, the better')
+- participle clauses (e.g., 'Walking down the street, he…')
+- past subjunctive (e.g., 'If I were you…')
+- 'so that' purpose clauses`}
 
 Your task:
 
@@ -88,17 +110,17 @@ Keep the total length under 1000 words, unless the user sets a different limit.
       <div className="form-grid">
         <div className="form-field full-width">
           <label htmlFor="plot">General Plot</label>
-          <input id="plot" type="text" value={plot} onChange={(e) => setPlot(e.target.value)} />
+          <input id="plot" type="text" value={plot} onChange={(e) => setPlot(e.target.value)} placeholder="A brother and sister traveling to foreign countries." />
         </div>
         
         <div className="form-field">
           <label htmlFor="theme">Theme to Emphasize</label>
-          <input id="theme" type="text" value={theme} onChange={(e) => setTheme(e.target.value)} />
+          <input id="theme" type="text" value={theme} onChange={(e) => setTheme(e.target.value)} placeholder="Cultural experiences, small mistakes, and meaningful lessons." />
         </div>
 
         <div className="form-field">
           <label htmlFor="tone">Tone/Style</label>
-          <input id="tone" type="text" value={tone} onChange={(e) => setTone(e.target.value)} />
+          <input id="tone" type="text" value={tone} onChange={(e) => setTone(e.target.value)} placeholder="Simple, warm, and encouraging." />
         </div>
 
         <div className="form-field">
@@ -141,6 +163,20 @@ Keep the total length under 1000 words, unless the user sets a different limit.
             className="grammar-input"
             value={includeGrammar}
             onChange={(e) => setIncludeGrammar(e.target.value)}
+            placeholder={`- gerunds
+- sense verbs + adjective (e.g., 'look happy')
+- subjective relative pronouns (who, which, that as subjects)
+- adverbs of frequency
+- present perfect (but not present perfect progressive)
+- so…that clauses
+- passive voice
+- comparative degree (but not double comparative structures like 'the more…the more')
+- objective relative pronouns (whom, which, that as objects)
+- participles expressing emotion (e.g., 'surprising', 'excited')
+- 'It' as a dummy subject (e.g., 'It is important to…')
+- indirect questions
+- object complements (e.g., 'make me happy')
+- if clauses`}
           />
         </div>
 
@@ -151,6 +187,20 @@ Keep the total length under 1000 words, unless the user sets a different limit.
             className="grammar-input"
             value={excludeGrammar}
             onChange={(e) => setExcludeGrammar(e.target.value)}
+            placeholder={`- present perfect progressive
+- the relative pronoun 'what'
+- non-restrictive relative clauses
+- participles modifying nouns from behind (e.g., 'the man standing there')
+- past perfect
+- conjunctions like 'although, unless, whereas'
+- if/whether used for indirect yes/no questions
+- passive voice of modal verbs (e.g., 'must be done')
+- idiomatic 'It is/was ~ for ~ to ~' expressions
+- relative adverbs (when, where, why as relative pronouns)
+- the comparative (… the comparative) structure (e.g., 'the more, the better')
+- participle clauses (e.g., 'Walking down the street, he…')
+- past subjunctive (e.g., 'If I were you…')
+- 'so that' purpose clauses`}
           />
         </div>
       </div>
