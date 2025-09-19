@@ -1,0 +1,5 @@
+{
+  "name": "Grammar-Aware Story Generator",
+  "description": "An app to generate stories based on specific grammatical rules and themes using the Gemini API.",
+  "requestFramePermissions": []
+}
